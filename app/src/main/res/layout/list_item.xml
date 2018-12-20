@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="0.5dp">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        app:cardBackgroundColor="#424242"
+        tools:cardBackgroundColor="#424242">
+
+
+        <LinearLayout
+            android:id="@+id/linearlayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <ImageButton
+                android:layout_width="10dp"
+                android:layout_height="match_parent"
+                android:backgroundTint="@color/colorPrimary"
+                android:maxWidth="7dp" />
+
+            <TextView
+                android:id="@+id/listitem_textView"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4.5"
+                android:letterSpacing="0.1"
+                android:padding="7dp"
+                android:text="Bananas"
+                android:textColor="#FFFF"
+                android:textSize="14sp" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="0.01"
+                android:background="#ffff" />
+
+            <CheckBox
+
+                android:id="@+id/checkBox"
+                android:layout_width="0dp"
+
+                android:layout_height="match_parent"
+                android:layout_marginEnd="1dp"
+                android:layout_weight="0.5"
+                android:buttonTint="#ffff"
+                android:padding="5dp" />
+
+
+        </LinearLayout>
+
+
+    </android.support.v7.widget.CardView>
+
+
+</LinearLayout>
