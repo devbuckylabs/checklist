@@ -51,6 +51,10 @@ public class Add_Category extends AppCompatActivity {
 
     public int getid() {
         Cursor cursor = databaseHelper.getdbdata();
+
+        if (cursor.getCount() == 0) {
+            return 1;
+        }
         cursor.moveToLast();
         int id = cursor.getInt(0);
         return ++id;
