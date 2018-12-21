@@ -1,12 +1,20 @@
 package com.buckylabs.checklist;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageButton;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +24,9 @@ public class SecondActivity extends AppCompatActivity {
     private List<ListItem> listItems = new ArrayList<>();
     private RecyclerView listitem_recyclerView;
     private RecyclerView.Adapter adapter;
+    private EditText editTextAddListItem;
+    private ImageButton imageButton;
+    private DatabaseHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,11 +37,68 @@ public class SecondActivity extends AppCompatActivity {
         listitem_recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new ListItem_Adapter(listItems, context);
         listitem_recyclerView.setAdapter(adapter);
-        listItems.addAll((List<ListItem>) getIntent().getSerializableExtra("intentlist"));
+        editTextAddListItem = findViewById(R.id.editText_add_list_item);
+        imageButton = findViewById(R.id.imgbutton);
 
-        Log.e("Listoo", listItems.toString());
-        adapter.notifyDataSetChanged();
+        databaseHelper = new DatabaseHelper(context);
+        populate_recyclerView();
+
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (editTextAddListItem.getText().length() > 0) {
+
+                    ListItem listItem = new ListItem(editTextAddListItem.getText().toString());
+                    listItems.add(listItem);
+                    int id = getIntent().getExtras().getInt("ID");
+                    Category category = getCategory(id);
+                    Log.e("cat", category.toString());
+                    category.setListItems(listItems);
+                    Log.e("cat added DB", category.toString());
+                    adapter.notifyDataSetChanged();
+                    addListItemtoDb(category);
+                }
+
+
+            }
+        });
 
 
     }
+
+
+    public void addListItemtoDb(Category category) {
+        databaseHelper.updatedbdata(category);
+
+    }
+
+    public void populate_recyclerView() {
+
+        int id = getIntent().getExtras().getInt("ID");
+        Category category = getCategory(id);
+        listItems.addAll(category.getListItems());
+        adapter.notifyDataSetChanged();
+    }
+
+    public Category getCategory(int id) {
+        Cursor cur = databaseHelper.getdbdata();
+        Gson gson = new Gson();
+        if (cur != null) {
+            if (cur.moveToFirst())
+                do {
+                    if (id == cur.getInt(0)) {
+                        String column_Name = cur.getString(1);
+                        Type type = new TypeToken<List<ListItem>>() {
+                        }.getType();
+                        List<ListItem> listItems = gson.fromJson(cur.getString(2), type);
+                        Category category = new Category(id, column_Name, listItems);
+                        return category;
+                    }
+
+                } while (cur.moveToNext());
+
+        }
+        return null;
+    }
 }
+
