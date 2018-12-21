@@ -1,8 +1,8 @@
 package com.buckylabs.checklist;
 
-import java.io.Serializable;
 
-public class ListItem implements Serializable {
+public class ListItem {
+
     private String item;
 
     public ListItem(String item) {
