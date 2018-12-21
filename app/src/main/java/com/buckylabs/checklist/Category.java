@@ -1,18 +1,26 @@
 package com.buckylabs.checklist;
 
-
 import java.util.List;
 
 public class Category {
+
+    private int id;
     private String category_name;
     private List<ListItem> listItems;
 
-
-    public Category(String category_name, List<ListItem> listItems) {
+    public Category(int id, String category_name, List<ListItem> listItems) {
+        this.id = id;
         this.category_name = category_name;
         this.listItems = listItems;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getCategory_name() {
         return category_name;
@@ -32,10 +40,10 @@ public class Category {
 
     @Override
     public String toString() {
-        return "CategoryListItem{" +
-                "category_name='" + category_name + '\'' +
+        return "Category{" +
+                "id=" + id +
+                ", category_name='" + category_name + '\'' +
                 ", listItems=" + listItems +
                 '}';
     }
-
 }
