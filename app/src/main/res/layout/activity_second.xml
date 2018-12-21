@@ -7,10 +7,61 @@
     android:orientation="vertical"
     tools:context=".SecondActivity">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/item_recyclerview"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+        android:layout_height="wrap_content"
+        android:layout_weight="115">
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/item_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </android.support.v7.widget.RecyclerView>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@color/colorPrimary"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp"
+        tools:background="@color/colorPrimary">
+
+        <EditText
+            android:id="@+id/editText_add_list_item"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="14dp"
+            android:layout_toStartOf="@+id/button1"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:gravity="bottom"
+            android:hint="Add New Item"
+            android:inputType="textCapWords"
+            android:padding="10dp"
+            android:singleLine="true"
+            android:textColor="#ffff"
+            android:textColorHint="#ffff"
+            android:windowSoftInputMode="adjustPan" />
+
+        <ImageButton
+            android:id="@+id/imgbutton"
+            android:layout_width="39dp"
+            android:layout_height="37dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="@color/colorPrimary"
+            android:src="@drawable/ic_send_black_24dp" />
+
+    </LinearLayout>
 
 </LinearLayout>
