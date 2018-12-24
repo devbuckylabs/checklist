@@ -48,57 +48,39 @@ public class SecondActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (editTextAddListItem.getText().length() > 0) {
 
-                    ListItem listItem = new ListItem(editTextAddListItem.getText().toString());
+                    ListItem listItem = new ListItem(editTextAddListItem.getText().toString(), false);
                     listItems.add(listItem);
                     int id = getIntent().getExtras().getInt("ID");
-                    Category category = getCategory(id);
+                    Category category = databaseHelper.getCategory(id);
                     Log.e("cat", category.toString());
                     category.setListItems(listItems);
                     Log.e("cat added DB", category.toString());
+                    editTextAddListItem.getText().clear();
                     adapter.notifyDataSetChanged();
                     addListItemtoDb(category);
                 }
 
-
             }
         });
-
 
     }
 
 
     public void addListItemtoDb(Category category) {
         databaseHelper.updatedbdata(category);
-
     }
 
     public void populate_recyclerView() {
 
         int id = getIntent().getExtras().getInt("ID");
-        Category category = getCategory(id);
-        listItems.addAll(category.getListItems());
+        Category category = databaseHelper.getCategory(id);
+        if (category.getListItems() != null) {
+            listItems.addAll(category.getListItems());
+        }
         adapter.notifyDataSetChanged();
     }
 
-    public Category getCategory(int id) {
-        Cursor cur = databaseHelper.getdbdata();
-        Gson gson = new Gson();
-        if (cur != null) {
-            if (cur.moveToFirst())
-                do {
-                    if (id == cur.getInt(0)) {
-                        String column_Name = cur.getString(1);
-                        Type type = new TypeToken<List<ListItem>>() {
-                        }.getType();
-                        List<ListItem> listItems = gson.fromJson(cur.getString(2), type);
-                        Category category = new Category(id, column_Name, listItems);
-                        return category;
-                    }
 
-                } while (cur.moveToNext());
 
-        }
-        return null;
-    }
 }
 
