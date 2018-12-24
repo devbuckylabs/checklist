@@ -8,8 +8,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -27,6 +31,9 @@ public class SecondActivity extends AppCompatActivity {
     private EditText editTextAddListItem;
     private ImageButton imageButton;
     private DatabaseHelper databaseHelper;
+    private TextView textView_catName;
+    private CheckBox checkBox_selectAll;
+    private ImageButton imageButton_delete;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +46,11 @@ public class SecondActivity extends AppCompatActivity {
         listitem_recyclerView.setAdapter(adapter);
         editTextAddListItem = findViewById(R.id.editText_add_list_item);
         imageButton = findViewById(R.id.imgbutton);
+
+        textView_catName = findViewById(R.id.textView_Catname);
+        checkBox_selectAll = findViewById(R.id.checkBox_selectAll);
+        imageButton_delete = findViewById(R.id.imgbutton_delete);
+
 
         databaseHelper = new DatabaseHelper(context);
         populate_recyclerView();
@@ -63,6 +75,67 @@ public class SecondActivity extends AppCompatActivity {
             }
         });
 
+
+        textView_catName.setText(getIntent().getExtras().getString("CategoryName"));
+
+        checkBox_selectAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                if (listItems.size() == 0) {
+                    checkBox_selectAll.setChecked(false);
+                    Toast.makeText(context, "No items to select", Toast.LENGTH_SHORT).show();
+                } else {
+                    checkBox_selectAll.setChecked((isChecked));
+
+                    Log.e("List", "in");
+                    if (isChecked) {
+
+                        for (ListItem listItem : listItems) {
+                            listItem.setItemChecked(true);
+                        }
+
+                        adapter.notifyDataSetChanged();
+
+                    }
+                }
+
+            }
+        });
+
+
+        imageButton_delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (listItems != null) {
+                    List<ListItem> listItemsToUpdate = new ArrayList<>();
+                    for (ListItem listItem : listItems) {
+
+                        if (listItem.isItemChecked()) {
+
+                        } else {
+                            listItemsToUpdate.add(listItem);
+                        }
+
+                    }
+                    listItems.clear();
+                    listItems.addAll(listItemsToUpdate);
+                    int id = getIntent().getExtras().getInt("ID");
+                    Category category = databaseHelper.getCategory(id);
+                    Log.e("BeforeList", listItemsToUpdate.toString());
+                    category.setListItems(listItems);
+                    Log.e("AfterList", listItemsToUpdate.toString());
+                    Log.e("CatList", category.getListItems().toString());
+                    addListItemtoDb(category);
+
+                }
+                adapter.notifyDataSetChanged();
+                checkBox_selectAll.setChecked(false);
+
+            }
+        });
+
     }
 
 
@@ -80,7 +153,10 @@ public class SecondActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
     }
 
+    public List<ListItem> getlistItems(int id) {
+        Category category = databaseHelper.getCategory(id);
+        return category.getListItems();
 
-
+    }
 }
 
