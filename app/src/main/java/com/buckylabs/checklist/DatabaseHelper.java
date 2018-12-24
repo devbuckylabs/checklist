@@ -8,7 +8,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 
@@ -72,7 +74,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         Gson gson = new Gson();
-        String json = gson.toJson(category.getListItems(), List.class);
+        Type type = new TypeToken<List<ListItem>>() {
+        }.getType();
+        String json = gson.toJson(category.getListItems(), type);
 
         contentValues.put(Column_3, json);
         int row = db.update(TABLE_NAME, contentValues, String.format("%s = ?", "ID"), new String[]{Integer.toString(category.getId())});
@@ -80,9 +84,43 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return true;
     }
 
+   /* public boolean updateListItem(ListItem listItem){
+        SQLiteDatabase db=this.getWritableDatabase();
+        ContentValues contentValues=new ContentValues();
+        Gson gson=new Gson();
+        String json=gson.toJson()
+
+    }
+    */
+
     public void droptable() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
 
+    }
+
+    public Category getCategory(int id) {
+        Cursor cur = getdbdata();
+        Gson gson = new Gson();
+        Log.e("Im", "going in");
+        if (cur != null) {
+            Log.e("Im", "not null");
+            if (cur.moveToFirst())
+                do {
+                    Log.e("Im", "inn");
+                    if (id == cur.getInt(0)) {
+                        Log.e("Im", "innnn");
+                        String column_Name = cur.getString(1);
+                        Type type = new TypeToken<List<ListItem>>() {
+                        }.getType();
+                        List<ListItem> listItems = gson.fromJson(cur.getString(2), type);
+                        Category category = new Category(id, column_Name, listItems);
+                        return category;
+                    }
+
+                } while (cur.moveToNext());
+
+        }
+        return null;
     }
 }
