@@ -54,10 +54,11 @@ public class Add_Category extends AppCompatActivity {
 
         if (cursor.getCount() == 0) {
             return 1;
+        } else {
+            cursor.moveToLast();
+            int id = cursor.getInt(0);
+            return ++id;
         }
-        cursor.moveToLast();
-        int id = cursor.getInt(0);
-        return ++id;
     }
 
 }
