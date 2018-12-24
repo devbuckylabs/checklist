@@ -53,12 +53,9 @@ public class ListItem_Adapter extends RecyclerView.Adapter<ListItem_Adapter.View
                 listItem.setItemChecked(viewHolder.checkBox.isChecked());
                 updateListItems.clear();
                 updateListItems.addAll(itemList);
-                //updateListItems.add(listItem);
                 Log.e("onCheckChanged", listItem.toString());
                 int id = ((Activity) context).getIntent().getExtras().getInt("ID");
                 Log.e("ID", id + "");
-                Category category = databaseHelper.getCategory(1);
-                Log.e("Printing again", category.toString());
                 viewHolder.addListItemToDB(id);
             }
         });
