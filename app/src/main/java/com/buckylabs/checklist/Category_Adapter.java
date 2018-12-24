@@ -45,6 +45,7 @@ public class Category_Adapter extends RecyclerView.Adapter<Category_Adapter.View
                 //Toast.makeText(context, categoryListItem.getListItems().toString(), Toast.LENGTH_LONG).show();
                 Intent i = new Intent(context, SecondActivity.class);
                 i.putExtra("ID", categoryListItem.getId());
+                i.putExtra("CategoryName", categoryListItem.getCategory_name());
                 context.startActivity(i);
             }
         });
